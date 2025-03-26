@@ -1,13 +1,14 @@
+/* General styles */
 .results-container {
-    text-align: center;
-    margin-top: 50px;
-    font-family: Arial, sans-serif;
-  }
-  
-  .results-container h1 {
-    font-size: 2.5em;
-    color: #333;
-  }
+  text-align: center;
+  margin-top: 50px;
+  font-family: Arial, sans-serif;
+}
+
+.results-container h1 {
+  font-size: 2.5em;
+  color: #333;
+}
 
 .results-card {
   max-width: 800px;
@@ -15,23 +16,45 @@
   padding: 20px;
 }
 
+/* Results statistics styles */
+.results-statistics {
+  text-align: left;
+  margin-bottom: 20px;
+  font-size: 1.2em;
+}
+
+.results-statistics p {
+  margin: 5px 0;
+}
+
+/* Table styles */
 .results-table {
   width: 100%;
   margin-top: 20px;
+  border-collapse: collapse;
 }
 
 .mat-header-cell {
   font-weight: bold;
 }
 
-.results-table .mat-cell.correct {
-  background-color: #4caf50 !important; 
-  color: white !important;
-  font-weight: bold;
+.results-table th,
+.results-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
 }
 
-.mat-cell.correct {
-  background-color: #4caf50 !important; 
+.results-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.results-table tr:hover {
+  background-color: #f1f1f1;
+}
+
+/* Correct and wrong answer styles */
+.results-table .mat-cell.correct {
+  background-color: #4caf50 !important;
   color: white !important;
   font-weight: bold;
 }
@@ -44,4 +67,21 @@
 .wrong {
   color: red;
   font-weight: bold;
+}
+
+/* Restart button styles */
+.restart-button {
+  font-size: 16px;
+  font-weight: bold;
+  padding: 10px 20px;
+}
+
+@media (max-width: 600px) {
+  .results-table {
+    font-size: 12px;
+  }
+
+  .restart-button {
+    width: 100%;
+  }
 }

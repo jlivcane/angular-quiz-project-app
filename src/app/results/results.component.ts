@@ -6,6 +6,8 @@ import { MatTableModule } from '@angular/material/table';
 import { CommonModule } from '@angular/common';
 import { Observable } from 'rxjs';
 import { ResultsService } from '../services/results.service';
+import { Store } from '@ngrx/store';
+import { QuizState } from '../state/quiz.state';
 
 @Component({
   selector: 'app-results',
@@ -17,9 +19,10 @@ import { ResultsService } from '../services/results.service';
 export class ResultsComponent implements OnInit {
   answeredQuestions: { question: string; userAnswer: string | null; correctAnswer: string; isCorrect: boolean }[] = [];
   score: number | null = null;
-  results: { totalQuestions: number; correctAnswers: number }[] = [];
+  results: { totalQuestions: number; correctAnswers: number; timestamp: Date }[] = [];
+  attempts$!: Observable<QuizState['attempts']>;
 
-  constructor(private router: Router, private resultsService: ResultsService) {
+  constructor(private router: Router, private resultsService: ResultsService, @Inject(Store) private store: Store<{ quiz: QuizState }>) {
     const navigation = this.router.getCurrentNavigation();
     const stateData = navigation?.extras.state?.['answeredQuestions'];
     if (stateData && Array.isArray(stateData)) {
@@ -31,15 +34,19 @@ export class ResultsComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    // Fetch results from the ResultsService
     this.resultsService.getResults().subscribe({
       next: (results) => {
-        this.results = results;
-        console.log('Results:', results);
+        this.results = results; // Bind results to the template
+        console.log('Results:', results); // Debugging log
       },
       error: (err) => {
         console.error('Error fetching results:', err);
       }
     });
+
+    // Fetch attempts from the store
+    this.attempts$ = this.store.select((state) => state.quiz.attempts);
   }
 
   restartQuiz(): void {

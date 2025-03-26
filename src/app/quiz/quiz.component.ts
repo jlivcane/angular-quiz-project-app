@@ -8,6 +8,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { addAttempt } from '../state/quiz.actions';
+import { ResultsService } from '../services/results.service';
 
 @Component({
   selector: 'app-quiz',
@@ -35,8 +38,10 @@ export class QuizComponent implements OnInit, OnDestroy {
   answered = false;
   answeredQuestions: { question: string; userAnswer: string | null; correctAnswer: string; isCorrect: boolean }[] = [];
   errorMessage: string | null = null;
+  totalQuestions = 10;
+  correctAnswers = 0;
 
-  constructor(private questionService: QuestionService, @Inject(Router) private router: Router) {}
+  constructor(private questionService: QuestionService, @Inject(Router) private router: Router, @Inject(Store) private store: Store, private resultsService: ResultsService) {}
 
   ngOnInit(): void {
     console.log('QuizComponent initialized'); // Debugging log
@@ -120,6 +125,7 @@ export class QuizComponent implements OnInit, OnDestroy {
 
       if (isCorrect) {
         this.score++;
+        this.correctAnswers++;
       }
     }
 
@@ -131,6 +137,17 @@ export class QuizComponent implements OnInit, OnDestroy {
   endQuiz(): void {
     this.clearTimer();
     console.log('Quiz ended. Final score:', this.score);
+
+    this.store.dispatch(
+      addAttempt({
+        score: this.score,
+        totalQuestions: this.totalQuestions,
+        correctAnswers: this.correctAnswers,
+      })
+    );
+
+    // Add the current attempt to the ResultsService
+    this.resultsService.addAttempt(this.totalQuestions, this.score);
 
     this.router.navigate(['/results'], { 
       state: { 

@@ -3,15 +3,9 @@ import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
 interface Attempt {
-  score: number;
   totalQuestions: number;
   correctAnswers: number;
   timestamp: Date;
-}
-
-interface Result {
-  totalQuestions: number;
-  correctAnswers: number;
 }
 
 @Injectable({
@@ -21,20 +15,14 @@ export class ResultsService {
   private attemptsSubject = new BehaviorSubject<Attempt[]>([]);
   attempts$ = this.attemptsSubject.asObservable();
 
-  private results: Result[] = [
-    { totalQuestions: 10, correctAnswers: 8 },
-    { totalQuestions: 15, correctAnswers: 12 },
-    { totalQuestions: 20, correctAnswers: 18 },
-  ];
-
-  addAttempt(score: number, totalQuestions: number, correctAnswers: number): void {
-    try {
-      const currentAttempts = this.attemptsSubject.value;
-      const newAttempt: Attempt = { score, totalQuestions, correctAnswers, timestamp: new Date() };
-      this.attemptsSubject.next([...currentAttempts, newAttempt]);
-    } catch (error) {
-      console.error('Error adding attempt:', error);
-    }
+  addAttempt(totalQuestions: number, correctAnswers: number): void {
+    const newAttempt: Attempt = {
+      totalQuestions,
+      correctAnswers,
+      timestamp: new Date(),
+    };
+    const currentAttempts = this.attemptsSubject.value;
+    this.attemptsSubject.next([...currentAttempts, newAttempt]);
   }
 
   clearAttempts(): void {
@@ -54,12 +42,7 @@ export class ResultsService {
     );
   }
 
-  getResults(): Observable<Result[]> {
-    return of(this.results).pipe(
-      catchError((error) => {
-        console.error('Error fetching results:', error);
-        return throwError(() => new Error('Failed to fetch results'));
-      })
-    );
+  getResults(): Observable<Attempt[]> {
+    return this.attempts$;
   }
 }

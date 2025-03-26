@@ -21,3 +21,10 @@ export const endQuiz = createAction(
 );
 
 export const resetStatistics = createAction('[Quiz] Reset Statistics');
+
+export const addAttempt = createAction(
+  '[Quiz] Add Attempt',
+  props<{ score: number; totalQuestions: number; correctAnswers: number }>()
+);
+
+export const clearAttempts = createAction('[Quiz] Clear Attempts');
