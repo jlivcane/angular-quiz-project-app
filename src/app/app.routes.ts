@@ -5,7 +5,6 @@ import { ResultsComponent } from './results/results.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
-  { path: 'quiz', component: QuizComponent }, // Ensure this route exists
+  { path: 'quiz', component: QuizComponent },
   { path: 'results', component: ResultsComponent },
-  { path: '**', redirectTo: '' }, // Catch-all route
 ];

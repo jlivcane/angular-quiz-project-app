@@ -92,4 +92,15 @@ describe('QuizComponent', () => {
 
     expect(component.score).toBe(0); // The score should not change for incorrect answer
   });
+
+  it('should set loading to false after fetching questions', () => {
+    const mockQuestions = [
+      { question: 'What is 2 + 2?', answers: ['3', '4', '5'], correct: '4' }
+    ];
+
+    questionService.fetchQuestions.and.returnValue(of(mockQuestions)); // Mock the service method
+    fixture.detectChanges(); // Trigger change detection
+
+    expect(component.loading).toBeFalse(); // Ensure loading is set to false
+  });
 });

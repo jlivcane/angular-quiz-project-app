@@ -7,11 +7,18 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-quiz',
   standalone: true,
-  imports: [MatCardModule, MatButtonModule, MatProgressBarModule, CommonModule],
+  imports: [
+    MatCardModule,
+    MatButtonModule,
+    MatProgressBarModule,
+    CommonModule,
+    RouterModule // Ensure RouterModule is imported
+  ],
   templateUrl: './quiz.component.html',
   styleUrls: ['./quiz.component.css']
 })
@@ -32,20 +39,23 @@ export class QuizComponent implements OnInit, OnDestroy {
   constructor(private questionService: QuestionService, @Inject(Router) private router: Router) {}
 
   ngOnInit(): void {
+    console.log('QuizComponent initialized'); // Debugging log
+
     this.questionService.fetchQuestions(10).subscribe({
       next: (response) => {
+        console.log('Fetched questions:', response); // Debugging log
         this.questions = response;
         this.setCurrentQuestion();
-        this.loading = false;
+        this.loading = false; // Ensure loading is set to false
         this.errorMessage = null;
       },
       error: (error) => {
-        console.error('Error fetching questions:', error);
-        this.loading = false;
+        console.error('Error fetching questions:', error); // Debugging log
+        this.loading = false; // Ensure loading is set to false even on error
         this.errorMessage = 'Failed to load questions. Please try again later.';
       },
       complete: () => {
-        console.log('Question fetching completed.');
+        console.log('Question fetching completed.'); // Debugging log
       }
     });
   }
