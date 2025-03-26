@@ -1,19 +1,18 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { ResultsComponent } from './results/results.component'; // Import the ResultsComponent
-
-// ...existing code...
-
-const routes: Routes = [
-	// ...existing routes...
-	{ path: 'results', component: ResultsComponent }, // Add the route for ResultsComponent
-	// ...existing routes...
-];
-
-// export { routes }; // Removed to allow static analysis
+import { HomeComponent } from './home/home.component'; // Import HomeComponent
+import { QuizComponent } from './quiz/quiz.component'; // Import QuizComponent
 
 @NgModule({
-	imports: [RouterModule.forRoot(routes)],
-	exports: [RouterModule]
+  imports: [
+    RouterModule.forRoot([
+      { path: '', component: HomeComponent },
+      { path: 'quiz', component: QuizComponent },
+      { path: 'results', component: ResultsComponent },
+      { path: '**', redirectTo: '' } // Catch-all route
+    ]) // Inline routes array here
+  ],
+  exports: [RouterModule]
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

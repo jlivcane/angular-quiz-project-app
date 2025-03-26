@@ -1,12 +1,10 @@
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { provideRouter } from '@angular/router';
 
 @Component({
   selector: 'app-root',
-  imports: [],
-  providers: [provideRouter([])],
-  imports: [RouterModule],
+  standalone: true,
+  imports: [RouterModule], // Ensure this is correctly placed
   template: `
     <h1>{{ title }}</h1>
     <router-outlet></router-outlet>
