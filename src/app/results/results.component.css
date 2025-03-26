@@ -1,0 +1,47 @@
+.results-container {
+    text-align: center;
+    margin-top: 50px;
+    font-family: Arial, sans-serif;
+  }
+  
+  .results-container h1 {
+    font-size: 2.5em;
+    color: #333;
+  }
+
+.results-card {
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 20px;
+}
+
+.results-table {
+  width: 100%;
+  margin-top: 20px;
+}
+
+.mat-header-cell {
+  font-weight: bold;
+}
+
+.results-table .mat-cell.correct {
+  background-color: #4caf50 !important; 
+  color: white !important;
+  font-weight: bold;
+}
+
+.mat-cell.correct {
+  background-color: #4caf50 !important; 
+  color: white !important;
+  font-weight: bold;
+}
+
+.correct {
+  color: green;
+  font-weight: bold;
+}
+
+.wrong {
+  color: red;
+  font-weight: bold;
+}

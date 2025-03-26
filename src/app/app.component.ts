@@ -1,12 +1,22 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { RouterModule } from '@angular/router';
+import { provideRouter } from '@angular/router';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+  imports: [],
+  providers: [provideRouter([])],
+  imports: [RouterModule],
+  template: `
+    <h1>{{ title }}</h1>
+    <router-outlet></router-outlet>
+  `,
+  styles: []
 })
 export class AppComponent {
-  title = 'quiz-app-advanced';
+  title = 'Quiz App';
+
+  constructor() {
+    console.log('AppComponent initialized'); // Debugging log
+  }
 }

@@ -1,0 +1,41 @@
+<mat-card class="quiz-card" *ngIf="!loading && questions.length > 0">
+  <mat-card-title class="question-title">
+    {{ currentQuestion?.question || 'Question not available' }}
+  </mat-card-title>
+
+  <mat-card-content>
+    <div class="answers">
+      <button
+        mat-raised-button
+        *ngFor="let answer of currentQuestion?.answers || []"
+        (click)="selectAnswer(answer)"
+        [ngClass]="{
+          'correct': answered && answer === currentQuestion?.correct,
+          'wrong': answered && selectedAnswer === answer && answer !== currentQuestion?.correct
+        }"
+        [disabled]="answered"
+        class="answer-btn"
+      >
+        {{ answer }}
+      </button>
+    </div>
+
+    <mat-progress-bar
+      class="progress-bar"
+      mode="determinate"
+      [value]="(timeLeft || 0) / timeLimit * 100"
+    ></mat-progress-bar>
+
+    <p class="timer">Time left: {{ timeLeft || 0 }} seconds</p>
+  </mat-card-content>
+</mat-card>
+
+<!-- Removed the Quiz Statistics section -->
+
+<p *ngIf="loading" class="loading-message">Loading questions...</p>
+
+<p *ngIf="!loading && questions.length === 0" class="no-questions-message">
+  No questions available. Please try again later.
+</p>
+
+<p *ngIf="errorMessage" class="error-message">{{ errorMessage }}</p>

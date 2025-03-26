@@ -1,0 +1,74 @@
+<mat-card class="results-card">
+  <mat-card-header>
+    <mat-card-title>Quiz Results</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <p>Your score: <strong>{{ score }}</strong></p>
+
+    <table mat-table [dataSource]="answeredQuestions" class="mat-elevation-z8 results-table">
+      <ng-container matColumnDef="question">
+        <th mat-header-cell *matHeaderCellDef> Question </th>
+        <td mat-cell *matCellDef="let question"> {{ question.question }} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="userAnswer">
+        <th mat-header-cell *matHeaderCellDef> Your Answer </th>
+        <td mat-cell *matCellDef="let question" [ngClass]="{ 'correct': question.isCorrect }">
+          {{ question.userAnswer || 'No Answer' }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="correctAnswer">
+        <th mat-header-cell *matHeaderCellDef> Correct Answer </th>
+        <td mat-cell *matCellDef="let question"> {{ question.correctAnswer }} </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="['question', 'userAnswer', 'correctAnswer']"></tr>
+      <tr mat-row *matRowDef="let row; columns: ['question', 'userAnswer', 'correctAnswer'];" 
+          class="results-row"></tr>
+    </table>
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-raised-button color="accent" class="restart-button" (click)="restartQuiz()">Start Quiz Again</button>
+  </mat-card-actions>
+</mat-card>
+
+<style>
+  .results-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .results-table th, .results-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+  }
+
+  .results-row:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+
+  .results-row:hover {
+    background-color: #f1f1f1;
+  }
+
+  .restart-button {
+    font-size: 16px;
+    font-weight: bold;
+    padding: 10px 20px;
+  }
+
+  @media (max-width: 600px) {
+    .results-table {
+      font-size: 12px;
+    }
+
+    .restart-button {
+      width: 100%;
+    }
+  }
+</style>
+
+
+
+
