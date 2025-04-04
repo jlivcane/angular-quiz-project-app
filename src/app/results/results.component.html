@@ -33,28 +33,21 @@
 
     <!-- Display results statistics -->
     <h3>Overall Results</h3>
-    <table mat-table [dataSource]="results" class="mat-elevation-z8 results-table">
-      <!-- Timestamp Column -->
-      <ng-container matColumnDef="timestamp">
-        <th mat-header-cell *matHeaderCellDef> Timestamp </th>
-        <td mat-cell *matCellDef="let result"> {{ result.timestamp | date: 'short' }} </td>
-      </ng-container>
-
-      <!-- Total Questions Column -->
-      <ng-container matColumnDef="totalQuestions">
-        <th mat-header-cell *matHeaderCellDef> Total Questions </th>
-        <td mat-cell *matCellDef="let result"> {{ result.totalQuestions }} </td>
-      </ng-container>
-
-      <!-- Correct Answers Column -->
-      <ng-container matColumnDef="correctAnswers">
-        <th mat-header-cell *matHeaderCellDef> Correct Answers </th>
-        <td mat-cell *matCellDef="let result"> {{ result.correctAnswers }} </td>
-      </ng-container>
-
-      <!-- Header and Row Definitions -->
-      <tr mat-header-row *matHeaderRowDef="['timestamp', 'totalQuestions', 'correctAnswers']"></tr>
-      <tr mat-row *matRowDef="let row; columns: ['timestamp', 'totalQuestions', 'correctAnswers'];"></tr>
+    <table>
+      <thead>
+        <tr>
+          <th>Timestamp</th>
+          <th>Total Questions</th>
+          <th>Correct Answers</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let attempt of (attempts$ | async)">
+          <td>{{ attempt.timestamp | date: 'short' }}</td>
+          <td>{{ attempt.totalQuestions }}</td>
+          <td>{{ attempt.correctAnswers }}</td>
+        </tr>
+      </tbody>
     </table>
   </mat-card-content>
   <mat-card-actions>

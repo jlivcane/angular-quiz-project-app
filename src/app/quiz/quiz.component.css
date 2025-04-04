@@ -1,4 +1,3 @@
-
 .quiz-card {
   max-width: 600px;
   margin: 50px auto;
@@ -33,6 +32,7 @@
   transition: background-color 0.3s, box-shadow 0.3s;
   margin: 5px 0;
   width: 100%;
+  display: block; /* Ensure buttons are visible */
 }
 
 .answer-btn:hover {
@@ -87,4 +87,19 @@
 .answer-btn {
   margin: 5px 0;
   width: 100%;
+}
+
+select {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+}
+
+.error-message {
+  color: red;
+  font-size: 14px;
+  margin-top: 10px;
 }

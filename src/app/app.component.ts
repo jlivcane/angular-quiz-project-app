@@ -4,17 +4,8 @@ import { RouterModule } from '@angular/router';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterModule], // Ensure this is correctly placed
-  template: `
-    <h1>{{ title }}</h1>
-    <router-outlet></router-outlet>
-  `,
-  styles: []
+  imports: [RouterModule], // Import RouterModule here
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
 })
-export class AppComponent {
-  title = 'Quiz App';
-
-  constructor() {
-    console.log('AppComponent initialized'); // Debugging log
-  }
-}
+export class AppComponent {}

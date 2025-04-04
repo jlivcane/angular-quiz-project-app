@@ -2,8 +2,6 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { QuizComponent } from './quiz.component';
 import { QuestionService } from '../services/question.service';
 import { of } from 'rxjs';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { RouterTestingModule } from '@angular/router/testing';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
@@ -19,8 +17,6 @@ describe('QuizComponent', () => {
 
     await TestBed.configureTestingModule({
       imports: [
-        HttpClientTestingModule,
-        RouterTestingModule,
         MatCardModule,
         MatButtonModule,
         MatProgressBarModule
@@ -74,7 +70,7 @@ describe('QuizComponent', () => {
     fixture.detectChanges(); // Trigger change detection
 
     // Select the correct answer
-    component.selectAnswer('4'); // This should increment the score
+    component.selectAnswer('4'); 
 
     expect(component.score).toBe(1); // The score should increment to 1 for correct answer
   });

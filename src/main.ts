@@ -1,10 +1,10 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { provideStore } from '@ngrx/store';
+import { AppComponent } from './app/app.component';
 import { provideRouter } from '@angular/router';
+import { routes } from './app/app.routes';
 import { provideHttpClient } from '@angular/common/http';
 import { provideAnimations } from '@angular/platform-browser/animations';
-import { AppComponent } from './app/app.component';
-import { routes } from './app/app.routes';
+import { provideStore } from '@ngrx/store';
 import { quizReducer } from './app/state/quiz.reducer';
 
 bootstrapApplication(AppComponent, {
@@ -12,6 +12,6 @@ bootstrapApplication(AppComponent, {
     provideRouter(routes),
     provideHttpClient(),
     provideAnimations(),
-    provideStore({ quiz: quizReducer }), // Register the quiz reducer
+    provideStore({ quiz: quizReducer })
   ],
-}).catch((err) => console.error(err));
+}).catch(err => console.error(err));

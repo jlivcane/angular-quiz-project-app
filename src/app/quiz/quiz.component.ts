@@ -1,68 +1,104 @@
-import { Component, OnInit, OnDestroy, Inject } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Router, RouterModule } from '@angular/router';
 import { QuestionService } from '../services/question.service';
 import { Subscription, interval } from 'rxjs';
 import { take } from 'rxjs/operators';
-import { MatCardModule } from '@angular/material/card';
-import { MatButtonModule } from '@angular/material/button';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatCardModule } from '@angular/material/card';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 import { Store } from '@ngrx/store';
+import { QuizState } from '../state/quiz.state';
 import { addAttempt } from '../state/quiz.actions';
-import { ResultsService } from '../services/results.service';
+
+interface QuizNavigationState {
+  selectedCategory: number;
+  selectedDifficulty: string;
+}
 
 @Component({
   selector: 'app-quiz',
   standalone: true,
   imports: [
-    MatCardModule,
-    MatButtonModule,
     MatProgressBarModule,
+    MatCardModule,
     CommonModule,
-    RouterModule // Ensure RouterModule is imported
+    RouterModule,
+    FormsModule
   ],
   templateUrl: './quiz.component.html',
   styleUrls: ['./quiz.component.css']
 })
 export class QuizComponent implements OnInit, OnDestroy {
-  questions: { question: string; answers: string[]; correct: string }[] = [];
+  questions: any[] = [];
+  currentQuestion: any | null = null;
+  subscription: Subscription | null = null;
+  loading = false;
+  errorMessage: string | null = null;
+  categories: { id: number; name: string }[] = [];
+  selectedCategory!: number;
+  selectedDifficulty!: string;
+  difficulties = ['easy', 'medium', 'hard'];
   currentQuestionIndex = 0;
-  currentQuestion: { question: string; answers: string[]; correct: string } | null = null;
   timeLimit = 30;
   timeLeft = this.timeLimit;
-  loading = true;
   timerSubscription: Subscription | null = null;
   score = 0;
   selectedAnswer: string | null = null;
   answered = false;
-  answeredQuestions: { question: string; userAnswer: string | null; correctAnswer: string; isCorrect: boolean }[] = [];
-  errorMessage: string | null = null;
+  answeredQuestions: {
+    question: string;
+    userAnswer: string | null;
+    correctAnswer: string;
+    isCorrect: boolean;
+  }[] = [];
   totalQuestions = 10;
   correctAnswers = 0;
 
-  constructor(private questionService: QuestionService, @Inject(Router) private router: Router, @Inject(Store) private store: Store, private resultsService: ResultsService) {}
+  constructor(
+    private questionService: QuestionService,
+    private router: Router,
+    private store: Store<{ quiz: QuizState }>
+  ) {
+    const navigation = this.router.getCurrentNavigation();
+    const state = navigation?.extras.state as (QuizNavigationState | undefined);
+    // Use bracket notation and provide fallback defaults if navigation state is missing.
+    if (state && state['selectedCategory'] && state['selectedDifficulty']) {
+      this.selectedCategory = state['selectedCategory'];
+      this.selectedDifficulty = state['selectedDifficulty'];
+    } else {
+      console.warn('Navigation state missing; using defaults.');
+      this.selectedCategory = 9; // e.g., General Knowledge
+      this.selectedDifficulty = 'medium';
+    }
+  }
 
   ngOnInit(): void {
-    console.log('QuizComponent initialized'); // Debugging log
-
-    this.questionService.fetchQuestions(10).subscribe({
-      next: (response) => {
-        console.log('Fetched questions:', response); // Debugging log
-        this.questions = response;
-        this.setCurrentQuestion();
-        this.loading = false; // Ensure loading is set to false
-        this.errorMessage = null;
-      },
-      error: (error) => {
-        console.error('Error fetching questions:', error); // Debugging log
-        this.loading = false; // Ensure loading is set to false even on error
-        this.errorMessage = 'Failed to load questions. Please try again later.';
-      },
-      complete: () => {
-        console.log('Question fetching completed.'); // Debugging log
-      }
-    });
+    this.loading = true;
+    this.questionService
+      .fetchQuestions(10, this.selectedDifficulty, this.selectedCategory)
+      .subscribe({
+        next: (response) => {
+          console.log('API Response:', response);
+          // Map the results to decode HTML entities and create an answers array
+          this.questions = response.results.map((q: any) => {
+            const decodedQuestion = this.decodeHTMLEntities(q.question);
+            const decodedCorrect = this.decodeHTMLEntities(q.correct_answer);
+            const decodedIncorrects = q.incorrect_answers.map((ans: string) =>
+              this.decodeHTMLEntities(ans)
+            );
+            const answers = this.shuffle([decodedCorrect, ...decodedIncorrects]);
+            return { ...q, question: decodedQuestion, correct: decodedCorrect, answers };
+          });
+          this.loading = false;
+          this.setCurrentQuestion();
+        },
+        error: (error) => {
+          console.error('Error fetching questions:', error);
+          this.errorMessage = 'Failed to load questions. Please try again later.';
+          this.loading = false;
+        }
+      });
   }
 
   setCurrentQuestion(): void {
@@ -79,7 +115,6 @@ export class QuizComponent implements OnInit, OnDestroy {
     if (this.timerSubscription) {
       this.timerSubscription.unsubscribe();
     }
-
     this.timerSubscription = interval(1000)
       .pipe(take(this.timeLimit))
       .subscribe({
@@ -99,7 +134,6 @@ export class QuizComponent implements OnInit, OnDestroy {
     this.currentQuestionIndex++;
     this.selectedAnswer = null;
     this.answered = false;
-
     if (this.currentQuestionIndex < this.questions.length) {
       this.setCurrentQuestion();
     } else {
@@ -111,7 +145,6 @@ export class QuizComponent implements OnInit, OnDestroy {
     if (this.answered) return;
     this.selectedAnswer = answer;
     this.answered = true;
-
     this.clearTimer();
 
     if (this.currentQuestion) {
@@ -122,7 +155,6 @@ export class QuizComponent implements OnInit, OnDestroy {
         correctAnswer: this.currentQuestion.correct,
         isCorrect,
       });
-
       if (isCorrect) {
         this.score++;
         this.correctAnswers++;
@@ -137,7 +169,6 @@ export class QuizComponent implements OnInit, OnDestroy {
   endQuiz(): void {
     this.clearTimer();
     console.log('Quiz ended. Final score:', this.score);
-
     this.store.dispatch(
       addAttempt({
         score: this.score,
@@ -145,15 +176,11 @@ export class QuizComponent implements OnInit, OnDestroy {
         correctAnswers: this.correctAnswers,
       })
     );
-
-    // Add the current attempt to the ResultsService
-    this.resultsService.addAttempt(this.totalQuestions, this.score);
-
-    this.router.navigate(['/results'], { 
-      state: { 
+    this.router.navigate(['/results'], {
+      state: {
         score: this.score,
         answeredQuestions: this.answeredQuestions
-      } 
+      }
     });
   }
 
@@ -161,14 +188,26 @@ export class QuizComponent implements OnInit, OnDestroy {
     return array.sort(() => Math.random() - 0.5);
   }
 
-  ngOnDestroy(): void {
-    this.clearTimer();
-  }
-
   clearTimer(): void {
     if (this.timerSubscription) {
       this.timerSubscription.unsubscribe();
       this.timerSubscription = null;
     }
+  }
+
+  startQuiz(): void {
+    console.log('startQuiz() called');
+    // Additional logic to start the quiz if applicable.
+  }
+
+  ngOnDestroy(): void {
+    this.clearTimer();
+    this.subscription?.unsubscribe();
+  }
+
+  private decodeHTMLEntities(text: string): string {
+    const textArea = document.createElement('textarea');
+    textArea.innerHTML = text;
+    return textArea.value;
   }
 }

@@ -1,54 +1,40 @@
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { catchError, retryWhen, delay, take, throwError, map, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Injectable({
-  providedIn: 'root', // Ensure the service is provided in the root injector
+  providedIn: 'root'
 })
 export class QuestionService {
-  private baseUrl = '/api/api.php'; // Use the proxy prefix
+  private apiUrl = 'https://opentdb.com/api.php';
+  private categoriesUrl = 'https://opentdb.com/api_category.php'; // Correct API endpoint
 
   constructor(private http: HttpClient) {}
 
-  fetchQuestions(amount: number = 10): Observable<any> {
-    const apiUrl = `${this.baseUrl}?amount=${amount}`;
-    console.log('Fetching questions from API:', apiUrl); // Debugging log
-    return this.http.get(apiUrl).pipe(
-      map((response: any) => {
-        console.log('API response:', response); // Debugging log
-        return response.results.map((q: any) => ({
-          question: this.decodeHtmlEntities(q.question),
-          correct: this.decodeHtmlEntities(q.correct_answer),
-          answers: this.shuffle([
-            ...q.incorrect_answers.map((a: string) => this.decodeHtmlEntities(a)),
-            this.decodeHtmlEntities(q.correct_answer)
-          ]),
-        }));
-      }),
-      catchError((error) => {
-        console.error('Error in fetchQuestions:', error); // Debugging log
-        return throwError(() => error);
-      })
+  fetchQuestions(amount: number, difficulty?: string, category?: number): Observable<any> {
+    let url = `${this.apiUrl}?amount=${amount}`;
+    if (difficulty) {
+      url += `&difficulty=${difficulty}`;
+    }
+    if (category) {
+      url += `&category=${category}`;
+    }
+    return this.http.get<any>(url);
+  }
+
+  fetchCategories(): Observable<any> {
+    const url = 'https://opentdb.com/api_category.php';
+    return this.http.get<any>(url);
+  }
+
+  getQuestions(category: string, difficulty: string): Observable<any> {
+    return this.http.get(`api/questions?category=${category}&difficulty=${difficulty}`);
+  }
+
+  getCategories(): Observable<any[]> {
+    return this.http.get<any>(this.categoriesUrl).pipe(
+      map(response => response.trivia_categories || [])
     );
   }
-
-  private decodeHtmlEntities(text: string): string {
-    const textArea = document.createElement('textarea');
-    textArea.innerHTML = text;
-    return textArea.value;
-  }
-
-  shuffle(array: any[]): any[] {
-    return array.sort(() => Math.random() - 0.5);
-  }
 }
-
-const sampleResponse = {
-  "results": [
-    {
-      "question": "What is the capital of France?",
-      "incorrect_answers": ["London", "Berlin", "Madrid"],
-      "correct_answer": "Paris"
-    }
-  ]
-};

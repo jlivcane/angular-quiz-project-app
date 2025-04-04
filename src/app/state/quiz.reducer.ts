@@ -1,6 +1,6 @@
 import { createReducer, on } from '@ngrx/store';
 import { QuizState, initialQuizState } from './quiz.state';
-import { startQuiz, answerQuestion, endQuiz, addAttempt, clearAttempts } from './quiz.actions';
+import { startQuiz, answerQuestion, endQuiz, addAttempt } from './quiz.actions';
 
 export const quizReducer = createReducer(
   initialQuizState,
@@ -25,27 +25,15 @@ export const quizReducer = createReducer(
         }
       : null,
   })),
-  on(endQuiz, (state, { score }) => ({
+  on(endQuiz, (state) => ({
     ...state,
-    attempts: [
-      ...state.attempts,
-      {
-        score,
-        totalQuestions: state.currentSession?.totalQuestions || 0,
-        timestamp: new Date(),
-      },
-    ],
     currentSession: null,
   })),
   on(addAttempt, (state, { score, totalQuestions, correctAnswers }) => ({
     ...state,
     attempts: [
       ...state.attempts,
-      { score, totalQuestions, correctAnswers, timestamp: new Date() },
+      { totalQuestions, correctAnswers, timestamp: new Date() },
     ],
-  })),
-  on(clearAttempts, (state) => ({
-    ...state,
-    attempts: [],
   }))
 );

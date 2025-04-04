@@ -1,7 +1,7 @@
 export interface QuizState {
   attempts: {
-    score: number;
     totalQuestions: number;
+    correctAnswers: number;
     timestamp: Date;
   }[];
   currentSession: {
@@ -17,6 +17,6 @@ export interface QuizState {
 }
 
 export const initialQuizState: QuizState = {
-  attempts: [],
+  attempts: [], // Initialize as an empty array
   currentSession: null,
 };

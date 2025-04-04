@@ -1,7 +1,7 @@
-import { Component, OnInit, Inject } from '@angular/core'; // Added Inject
+import { Component, OnInit, Inject } from '@angular/core'; 
 import { Router, RouterModule } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
-import { MatButtonModule } from '@angular/material/button'; // Ensure this import is correct and matches the library
+import { MatButtonModule } from '@angular/material/button'; 
 import { MatTableModule } from '@angular/material/table';
 import { CommonModule } from '@angular/common';
 import { Observable } from 'rxjs';
@@ -20,7 +20,7 @@ export class ResultsComponent implements OnInit {
   answeredQuestions: { question: string; userAnswer: string | null; correctAnswer: string; isCorrect: boolean }[] = [];
   score: number | null = null;
   results: { totalQuestions: number; correctAnswers: number; timestamp: Date }[] = [];
-  attempts$!: Observable<QuizState['attempts']>;
+  attempts$!: Observable<QuizState['attempts']>; // Define attempts$ with proper type
 
   constructor(private router: Router, private resultsService: ResultsService, @Inject(Store) private store: Store<{ quiz: QuizState }>) {
     const navigation = this.router.getCurrentNavigation();
@@ -31,22 +31,15 @@ export class ResultsComponent implements OnInit {
     } else {
       console.error('No answered questions data found in navigation state.');
     }
+    this.attempts$ = this.store.select((state) => state.quiz.attempts);
   }
 
   ngOnInit(): void {
-    // Fetch results from the ResultsService
-    this.resultsService.getResults().subscribe({
-      next: (results) => {
-        this.results = results; // Bind results to the template
-        console.log('Results:', results); // Debugging log
-      },
-      error: (err) => {
-        console.error('Error fetching results:', err);
-      }
+    this.store.select((state) => state.quiz).subscribe((quizState) => {
+      console.log('QuizState:', quizState); // Debugging log
     });
 
-    // Fetch attempts from the store
-    this.attempts$ = this.store.select((state) => state.quiz.attempts);
+    this.attempts$ = this.store.select((state) => state.quiz.attempts); // Observe attempts
   }
 
   restartQuiz(): void {

@@ -1,8 +1,28 @@
-<div class="header-container">
-  <h1 class="title">{{ title }}</h1>
-  <p class="subtitle">Get ready to test your knowledge!</p>
-  <button class="start-button" routerLink="/quiz">Start Quiz</button>
-</div>
+<mat-card class="quiz-card">
+  <mat-card-title>Select Quiz Options</mat-card-title>
+  <mat-card-content>
+    <div>
+      <label for="category">Category:</label>
+      <select id="category" [(ngModel)]="selectedCategory">
+        <option *ngFor="let category of categories" [value]="category.id">
+          {{ category.name }}
+        </option>
+      </select>
+    </div>
+
+    <div>
+      <label for="difficulty">Difficulty:</label>
+      <select id="difficulty" [(ngModel)]="selectedDifficulty">
+        <option *ngFor="let difficulty of difficulties" [value]="difficulty">
+          {{ difficulty | titlecase }}
+        </option>
+      </select>
+    </div>
+
+    <p *ngIf="errorMessage" class="error-message">{{ errorMessage }}</p>
+  </mat-card-content>
+  <button class="start-button" (click)="startQuiz()">Start Quiz</button>
+</mat-card>
 
 
 

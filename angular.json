@@ -27,8 +27,8 @@
               }
             ],
             "styles": [
-              "src/styles.css",
-              "@angular/material/prebuilt-themes/indigo-pink.css"
+              "@angular/material/prebuilt-themes/azure-blue.css",
+              "src/styles.css"
             ],
             "scripts": [],
             "server": "src/main.server.ts",
@@ -82,6 +82,7 @@
      "test": {
   "builder": "@angular-devkit/build-angular:karma",
   "options": {
+    
     "main": "src/test.ts",
     "karmaConfig": "karma.conf.js",  
     "polyfills": "src/polyfills.ts",
