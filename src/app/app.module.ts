@@ -7,7 +7,7 @@ import { MatSelectModule } from '@angular/material/select';
 
 @NgModule({
   imports: [
-    BrowserModule, // ✅ Import BrowserModule here
+    BrowserModule, 
     MatCardModule,
     MatButtonModule,
     MatSelectModule,

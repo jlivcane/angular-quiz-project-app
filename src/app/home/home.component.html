@@ -1,28 +1,35 @@
-<mat-card class="quiz-card">
-  <mat-card-title>Select Quiz Options</mat-card-title>
-  <mat-card-content>
-    <div>
-      <label for="category">Category:</label>
-      <select id="category" [(ngModel)]="selectedCategory">
-        <option *ngFor="let category of categories" [value]="category.id">
-          {{ category.name }}
-        </option>
-      </select>
-    </div>
+<div class="home-container">
+  <mat-card class="quiz-card">
+    <mat-card-header>
+      <mat-card-title class="card-title">Select Quiz Options</mat-card-title>
+    </mat-card-header>
+    <mat-card-content class="card-content">
+      <div class="form-group">
+        <label for="category">Category:</label>
+        <select id="category" [(ngModel)]="selectedCategory" class="select-box">
+          <option *ngFor="let category of categories" [value]="category.id">
+            {{ category.name }}
+          </option>
+        </select>
+      </div>
 
-    <div>
-      <label for="difficulty">Difficulty:</label>
-      <select id="difficulty" [(ngModel)]="selectedDifficulty">
-        <option *ngFor="let difficulty of difficulties" [value]="difficulty">
-          {{ difficulty | titlecase }}
-        </option>
-      </select>
-    </div>
+      <div class="form-group">
+        <label for="difficulty">Difficulty:</label>
+        <select id="difficulty" [(ngModel)]="selectedDifficulty" class="select-box">
+          <option *ngFor="let difficulty of difficulties" [value]="difficulty">
+            {{ difficulty | titlecase }}
+          </option>
+        </select>
+      </div>
 
-    <p *ngIf="errorMessage" class="error-message">{{ errorMessage }}</p>
-  </mat-card-content>
-  <button class="start-button" (click)="startQuiz()">Start Quiz</button>
-</mat-card>
+      <p *ngIf="errorMessage" class="error-message">{{ errorMessage }}</p>
+    </mat-card-content>
+
+    <div class="card-actions">
+      <button class="start-button" (click)="startQuiz()">Start Quiz</button>
+    </div>
+  </mat-card>
+</div>
 
 
 

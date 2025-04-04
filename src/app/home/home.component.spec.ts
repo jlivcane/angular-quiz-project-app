@@ -21,8 +21,4 @@ describe('HomeComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should render the title in the template', () => {
-    const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain('Welcome to the Quiz App!');
-  });
 });

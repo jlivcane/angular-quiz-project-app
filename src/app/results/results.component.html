@@ -1,18 +1,16 @@
 <mat-card class="results-card">
   <mat-card-header>
-    <mat-card-title>Quiz Statistics</mat-card-title>
+    <mat-card-title class="card-title">Quiz Statistics</mat-card-title>
   </mat-card-header>
-  <mat-card-content>
+  <mat-card-content class="results-content">
     <!-- Display answered questions -->
     <h3>Answered Questions</h3>
-    <table mat-table [dataSource]="answeredQuestions" class="mat-elevation-z8 answered-questions-table">
-      <!-- Question Column -->
+    <table mat-table [dataSource]="answeredQuestions" class="answered-questions-table mat-elevation-z8">
       <ng-container matColumnDef="question">
         <th mat-header-cell *matHeaderCellDef> Question </th>
-        <td mat-cell *matCellDef="let question"> {{ question.question }} </td>
+        <td mat-cell *matCellDef="let question">{{ question.question }}</td>
       </ng-container>
 
-      <!-- User Answer Column -->
       <ng-container matColumnDef="userAnswer">
         <th mat-header-cell *matHeaderCellDef> Your Answer </th>
         <td mat-cell *matCellDef="let question" [ngClass]="{ 'correct': question.isCorrect, 'wrong': !question.isCorrect }">
@@ -20,20 +18,18 @@
         </td>
       </ng-container>
 
-      <!-- Correct Answer Column -->
       <ng-container matColumnDef="correctAnswer">
         <th mat-header-cell *matHeaderCellDef> Correct Answer </th>
-        <td mat-cell *matCellDef="let question"> {{ question.correctAnswer }} </td>
+        <td mat-cell *matCellDef="let question">{{ question.correctAnswer }}</td>
       </ng-container>
 
-      <!-- Header and Row Definitions -->
       <tr mat-header-row *matHeaderRowDef="['question', 'userAnswer', 'correctAnswer']"></tr>
       <tr mat-row *matRowDef="let row; columns: ['question', 'userAnswer', 'correctAnswer'];"></tr>
     </table>
 
     <!-- Display results statistics -->
     <h3>Overall Results</h3>
-    <table>
+    <table class="results-statistics">
       <thead>
         <tr>
           <th>Timestamp</th>
@@ -51,7 +47,7 @@
     </table>
   </mat-card-content>
   <mat-card-actions>
-    <button mat-raised-button color="primary" (click)="restartQuiz()">Restart Quiz</button>
+    <button mat-raised-button color="accent" class="restart-button" (click)="restartQuiz()">Restart Quiz</button>
   </mat-card-actions>
 </mat-card>
 

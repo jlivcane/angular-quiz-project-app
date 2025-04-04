@@ -2,7 +2,11 @@
 .results-container {
   text-align: center;
   margin-top: 50px;
-  font-family: Arial, sans-serif;
+  font-family: 'Arial', sans-serif;
+  background: linear-gradient(to right, #6a11cb, #2575fc);
+  padding: 40px;
+  border-radius: 15px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
 }
 
 .results-container h1 {
@@ -11,15 +15,49 @@
 }
 
 .results-card {
-  max-width: 800px;
+  max-width: 900px;
   margin: 20px auto;
-  padding: 20px;
+  padding: 30px;
+  background: #ffffff;
+  border-radius: 15px;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+}
+
+.card-title {
+  font-size: 2.5em;
+  font-weight: bold;
+  color: #2575fc;
+  text-align: center;
+}
+
+.results-content {
+  text-align: left;
+}
+
+h3 {
+  color: #333;
+  font-size: 1.6em;
+  margin-bottom: 15px;
 }
 
 /* Results statistics styles */
 .results-statistics {
+  width: 100%;
+  margin-top: 20px;
+  border-collapse: collapse;
+}
+
+.results-statistics th {
+  background-color: #2575fc;
+  color: white;
+  padding: 10px;
   text-align: left;
-  margin-bottom: 20px;
+  font-weight: bold;
+}
+
+.results-statistics td {
+  border: 1px solid #ddd;
+  padding: 10px;
   font-size: 1.2em;
 }
 
@@ -36,12 +74,13 @@
 
 .mat-header-cell {
   font-weight: bold;
+  background-color: #f0f0f0;
 }
 
 .results-table th,
 .results-table td {
   border: 1px solid #ddd;
-  padding: 8px;
+  padding: 10px;
 }
 
 .results-table tr:nth-child(even) {
@@ -59,6 +98,12 @@
   font-weight: bold;
 }
 
+.results-table .mat-cell.wrong {
+  background-color: #f44336 !important;
+  color: white !important;
+  font-weight: bold;
+}
+
 .correct {
   color: green;
   font-weight: bold;
@@ -71,9 +116,20 @@
 
 /* Restart button styles */
 .restart-button {
-  font-size: 16px;
+  font-size: 1.2em;
   font-weight: bold;
-  padding: 10px 20px;
+  padding: 12px 24px;
+  background-color: #ff4081;
+  color: white;
+  border-radius: 25px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  border: none;
+}
+
+.restart-button:hover {
+  background-color: #f50057;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
 }
 
 @media (max-width: 600px) {
@@ -83,5 +139,6 @@
 
   .restart-button {
     width: 100%;
+    padding: 15px;
   }
 }
