@@ -12,6 +12,6 @@ bootstrapApplication(AppComponent, {
     provideRouter(routes),
     provideHttpClient(),
     provideAnimations(),
-    provideStore({ quiz: quizReducer })
+    provideStore({ quiz: quizReducer }) // Ensure StoreModule is provided
   ],
 }).catch(err => console.error(err));

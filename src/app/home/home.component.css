@@ -1,44 +1,4 @@
-.header-container {
-    text-align: center;
-    padding: 50px;
-    background: linear-gradient(to right, #6a11cb, #2575fc); 
-    color: white;
-    border-radius: 15px;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-    margin: 20px;
-    max-width: 600px;
-    margin-left: auto;
-    margin-right: auto;
-  }
-  
-  .title {
-    font-size: 2.5em;
-    font-weight: bold;
-    font-family: 'Roboto', sans-serif;
-    margin-bottom: 15px;
-  }
-  
-  .subtitle {
-    font-size: 1.2em;
-    font-family: 'Arial', sans-serif;
-    margin-bottom: 30px;
-  }
-  
-  .start-button {
-    font-size: 1.2em;
-    background-color: #ff4081;
-    color: white;
-    padding: 10px 20px;
-    border-radius: 25px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  }
-  
-  .start-button:hover {
-    background-color: #f50057; 
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-  }
-
-  .home-container {
+.home-container {
   text-align: center;
   margin-top: 50px;
   font-family: 'Arial', sans-serif;
@@ -140,4 +100,8 @@ label {
 
 .start-button:active {
   transform: scale(0.98);
+}
+
+.full-width {
+  width: 100%;
 }

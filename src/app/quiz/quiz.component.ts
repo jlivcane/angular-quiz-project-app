@@ -24,7 +24,7 @@ interface QuizNavigationState {
     MatCardModule,
     CommonModule,
     RouterModule,
-    FormsModule
+    FormsModule // Imported directly and statically referenced.
   ],
   templateUrl: './quiz.component.html',
   styleUrls: ['./quiz.component.css']
