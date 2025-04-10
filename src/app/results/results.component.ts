@@ -22,7 +22,11 @@ export class ResultsComponent implements OnInit {
   results: { totalQuestions: number; correctAnswers: number; timestamp: Date }[] = [];
   attempts$!: Observable<QuizState['attempts']>; // Define attempts$ with proper type
 
-  constructor(private router: Router, private resultsService: ResultsService, @Inject(Store) private store: Store<{ quiz: QuizState }>) {
+  constructor(
+    private router: Router,
+    private resultsService: ResultsService,
+    private store: Store<{ quiz: QuizState }> // Ensure Store is injected here
+  ) {
     const navigation = this.router.getCurrentNavigation();
     const stateData = navigation?.extras.state?.['answeredQuestions'];
     if (stateData && Array.isArray(stateData)) {

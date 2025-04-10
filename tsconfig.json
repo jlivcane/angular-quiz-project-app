@@ -13,17 +13,21 @@
     "isolatedModules": true,
     "esModuleInterop": true,
     "experimentalDecorators": true,
-    "moduleResolution": "bundler",
+    "moduleResolution": "node", // Ensure Node module resolution is enabled
     "importHelpers": true,
     "target": "ES2022",
     "module": "ES2022",
     "typeRoots": ["node_modules/@types"],
-    "types": ["jest"]
+    "types": ["jest", "node"], // Include Jest and Node types
+    "jsx": "react-jsx" // Enable JSX support for React 17+ (use "react" for React <17)
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
     "strictInjectionParameters": true,
     "strictInputAccessModifiers": true,
     "strictTemplates": true
-  }
+  },
+  "include": [
+    "src/**/*" // Ensure the directory containing App.tsx is included
+  ]
 }
