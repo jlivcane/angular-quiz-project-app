@@ -1,28 +1,21 @@
-import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { AppComponent } from './app.component'; 
-import { MatCardModule } from '@angular/material/card';
-import { MatButtonModule } from '@angular/material/button';
-import { MatSelectModule } from '@angular/material/select';
-import { HttpClientModule } from '@angular/common/http';
-import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
-import { FirestoreModule } from '@angular/fire/firestore';
-import { environment } from '../environments/environment';
+import { NgModule } from '@angular/core';
+import { RouterModule } from '@angular/router';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { MatTabsModule } from '@angular/material/tabs'; // Import MatTabsModule
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { routes } from './app.routes'; // Import the routes
 
 @NgModule({
   declarations: [],
   imports: [
     BrowserModule,
-    MatCardModule,
-    MatButtonModule,
-    MatSelectModule,
-    HttpClientModule,
-    FirestoreModule,
-    AppComponent,
+    BrowserAnimationsModule,
+    RouterModule.forRoot(routes), // Use routes directly
+    NgxChartsModule,
+    MatTabsModule // Add MatTabsModule here
   ],
-  providers: [
-    provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
-  ],
-  // Removed bootstrap array as AppComponent is a standalone component
+  providers: [],
+  bootstrap: []
 })
 export class AppModule { }

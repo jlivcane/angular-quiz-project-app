@@ -1,11 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
-import { QuestionService } from '../services/question.service';
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { QuestionService } from '../services/question.service';
 
 @Component({
   selector: 'app-home',
@@ -28,7 +28,10 @@ export class HomeComponent implements OnInit {
   difficulties: string[] = ['easy', 'medium', 'hard'];
   errorMessage: string = '';
 
-  constructor(private questionService: QuestionService, private router: Router) {}
+  constructor(
+    private questionService: QuestionService,
+    @Inject(Router) private router: Router
+  ) {}
 
   ngOnInit() {
     this.loadCategories(); // Ensure categories are loaded

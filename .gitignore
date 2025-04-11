@@ -49,3 +49,9 @@ src/app/services/firebase.service.ts
 # Firebase service keys
 firebaseConfig.js
 firebaseConfig.json
+
+# Ignore additional sensitive files
+*.key
+*.pem
+*.env
+secrets.json

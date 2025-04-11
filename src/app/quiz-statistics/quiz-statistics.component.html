@@ -1,0 +1,67 @@
+<div class="quiz-statistics">
+  <mat-toolbar color="primary">
+    <span>Quiz Statistics</span>
+    <mat-form-field appearance="outline" class="player-select">
+      <mat-label>Select Player</mat-label>
+      <mat-select [(value)]="selectedPlayer" (selectionChange)="onPlayerChange($event)">
+        <mat-option *ngFor="let player of players" [value]="player">{{ player }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </mat-toolbar>
+
+  <div class="summary-cards">
+    <mat-card>
+      <mat-card-title>Total Quizzes Played</mat-card-title>
+      <mat-card-content>{{ totalQuizzes }}</mat-card-content>
+    </mat-card>
+    <mat-card>
+      <mat-card-title>Average Score</mat-card-title>
+      <mat-card-content>{{ averageScore }}</mat-card-content>
+    </mat-card>
+    <mat-card>
+      <mat-card-title>Highest Score</mat-card-title>
+      <mat-card-content>{{ highestScore }}</mat-card-content>
+    </mat-card>
+    <mat-card>
+      <mat-card-title>Win/Loss Ratio</mat-card-title>
+      <mat-card-content>{{ winLossRatio }}</mat-card-content>
+    </mat-card>
+  </div>
+
+  <div class="charts">
+    <ngx-charts-line-chart
+      [results]="performanceData"
+      [scheme]="colorScheme"
+      [xAxis]="true"
+      [yAxis]="true"
+      [legend]="true"
+      [showXAxisLabel]="true"
+      [showYAxisLabel]="true"
+      xAxisLabel="Date"
+      yAxisLabel="Score">
+    </ngx-charts-line-chart>
+  </div>
+
+  <div class="detailed-results">
+    <h3>Detailed Results</h3>
+    <table mat-table [dataSource]="quizAttempts" class="mat-elevation-z8">
+      <ng-container matColumnDef="date">
+        <th mat-header-cell *matHeaderCellDef> Date </th>
+        <td mat-cell *matCellDef="let attempt">{{ attempt.timestamp | date: 'short' }}</td>
+      </ng-container>
+      <ng-container matColumnDef="score">
+        <th mat-header-cell *matHeaderCellDef> Score </th>
+        <td mat-cell *matCellDef="let attempt">{{ attempt.correctAnswers }}</td>
+      </ng-container>
+      <ng-container matColumnDef="details">
+        <th mat-header-cell *matHeaderCellDef> Details </th>
+        <td mat-cell *matCellDef="let attempt">
+          <button mat-button (click)="viewDetails(attempt)">View</button>
+        </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="['date', 'score', 'details']"></tr>
+      <tr mat-row *matRowDef="let row; columns: ['date', 'score', 'details'];"></tr>
+    </table>
+    <button mat-raised-button color="accent" (click)="goBackToResults()">Back to Results</button>
+  </div>
+</div>

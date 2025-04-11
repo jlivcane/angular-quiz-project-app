@@ -20,11 +20,11 @@ interface QuizNavigationState {
   selector: 'app-quiz',
   standalone: true,
   imports: [
-    MatProgressBarModule,
-    MatCardModule,
-    CommonModule,
     RouterModule,
-    FormsModule // Imported directly and statically referenced.
+    CommonModule,
+    FormsModule,
+    MatProgressBarModule,
+    MatCardModule
   ],
   templateUrl: './quiz.component.html',
   styleUrls: ['./quiz.component.css']
