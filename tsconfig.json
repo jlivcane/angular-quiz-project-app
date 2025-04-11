@@ -18,8 +18,7 @@
     "target": "ES2022",
     "module": "ES2022",
     "typeRoots": ["node_modules/@types"],
-    "types": ["jest", "node"], // Include Jest and Node types
-    "jsx": "react-jsx" // Enable JSX support for React 17+ (use "react" for React <17)
+    "types": ["jest", "node"] // Include Jest and Node types
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
