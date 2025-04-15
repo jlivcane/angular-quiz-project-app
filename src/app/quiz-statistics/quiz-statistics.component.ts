@@ -9,6 +9,12 @@ import { QuizState } from '../state/quiz.state';
 import { Router } from '@angular/router';
 import { FirebaseService } from '../services/firebase.service';
 
+interface QuizAttempt {
+  totalQuestions: number;
+  correctAnswers: number;
+  timestamp: Date;
+}
+
 @Component({
   selector: 'app-quiz-statistics',
   standalone: true,
@@ -24,15 +30,18 @@ import { FirebaseService } from '../services/firebase.service';
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class QuizStatisticsComponent implements OnInit {
-  players = ['Player 1', 'Player 2', 'Player 3'];
-  selectedPlayer = this.players[0];
+  columns = ['date', 'score', 'details']; // Define table columns
+  players: string[] = []; // Remove player-specific logic
+  selectedPlayer = ''; // Remove selectedPlayer logic
   totalQuizzes = 0;
   averageScore = 0;
   highestScore = 0;
   winLossRatio = '0:0';
-  quizAttempts: { totalQuestions: number; correctAnswers: number; timestamp: Date }[] = [];
+  quizAttempts: QuizAttempt[] = []; // Use the defined interface
   performanceData: any[] = [];
   colorScheme = { domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA'] };
+  noResultsMessage = '';
+  errorMessage = '';
 
   constructor(
     private store: Store<{ quiz: QuizState }>,
@@ -41,42 +50,50 @@ export class QuizStatisticsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.fetchStatistics();
+    if (!this.firebaseService.isAuthenticated()) {
+      console.warn('User not authenticated. Redirecting to login...');
+      this.router.navigate(['/login']);
+      return;
+    }
+    this.fetchStatistics(); // Fetch statistics for all players
   }
 
   fetchStatistics(): void {
-    this.firebaseService.getAllResults()
+    const userEmail = this.firebaseService.getCurrentUserEmail();
+    if (!userEmail) {
+      console.error('No user email found. Cannot fetch statistics.');
+      this.errorMessage = 'User email is not available. Please log in again.';
+      alert('An error occurred. Please log in again.');
+      this.router.navigate(['/login']);
+      return;
+    }
+
+    this.firebaseService.getPlayerResults(userEmail)
       .then((results) => {
-        console.log('Fetched results:', results); // Debugging log
-        this.quizAttempts = results;
-        this.totalQuizzes = results.length;
-        this.highestScore = Math.max(...results.map((r) => r.correctAnswers), 0);
-        this.averageScore = results.length
-          ? results.reduce((sum, r) => sum + r.correctAnswers, 0) / results.length
-          : 0;
-        const wins = results.filter((r) => r.correctAnswers > 50).length;
-        const losses = results.length - wins;
-        this.winLossRatio = `${wins}:${losses}`;
-        this.performanceData = results.map((r) => ({
-          name: r.timestamp.toDateString(),
-          value: r.correctAnswers,
+        console.log('Fetched results for authenticated user:', results); // Debugging log
+        if (results.length === 0) {
+          console.warn('No results found for the authenticated user.');
+          this.noResultsMessage = 'No quiz statistics available.';
+          this.quizAttempts = [];
+          return;
+        }
+        this.quizAttempts = results.map((r) => ({
+          timestamp: r.timestamp,
+          totalQuestions: r.totalQuestions,
+          correctAnswers: r.correctAnswers,
         }));
       })
       .catch((error) => {
-        if (error.message.includes('User is not authenticated')) {
-          console.error('Authentication error:', error.message);
-          alert('You must be logged in to view statistics. Please log in and try again.');
-          this.router.navigate(['/login']); // Redirect to login page
+        if (error.code === 'permission-denied') {
+          console.error('Permission denied while fetching statistics:', error);
+          this.errorMessage = 'You do not have permission to access this data.';
+          alert('Permission denied. Please contact support if you believe this is an error.');
         } else {
-          console.error('Error fetching statistics from Firebase:', error);
+          console.error('Error fetching statistics for authenticated user:', error);
+          this.errorMessage = 'Failed to load quiz statistics.';
           alert('An error occurred while fetching statistics. Please try again later.');
         }
       });
-  }
-
-  onPlayerChange(event: any): void {
-    console.log('Player changed:', this.selectedPlayer);
-    this.fetchStatistics();
   }
 
   viewDetails(attempt: any): void {

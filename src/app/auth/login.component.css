@@ -40,6 +40,12 @@
   margin-top: 10px;
 }
 
+.mat-icon {
+  vertical-align: middle;
+  font-size: 20px;
+  line-height: 1;
+}
+
 @media (max-width: 600px) {
   .login-container {
     padding: 15px;
